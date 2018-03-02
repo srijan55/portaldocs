@@ -1,8 +1,6 @@
 ## Monitor Chart V2
 The Monitor Chart V2 control is the newer version of [MonitorChart Control](portalfx-controls-monitor-chart.md). This allows you to plot the multi-dimensional metrics for your resource in Azure with support for dimension based grouping and filters . It is part of the Ibiza framework, and it inherently knows how to fetch data for your resource.
 
-The Monitor Chart control is available in SDK version **5.0.TODO** and above.
-
 ### Benefits
 - **Performance** - The charts are built to render quickly and make efficient network calls for data
 - **Multi-dimensional support** - The charts support grouping and filtering on the dimensions from your multi-dimensional metric data.
