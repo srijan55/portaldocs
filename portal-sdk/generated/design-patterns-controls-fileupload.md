@@ -3,7 +3,7 @@
  
 <a name="basics"></a>
 ### Basics
-<!-- TODO guidance FileUpdate  -->
+The FileUpload control enables the user to upload files
 
 
 
@@ -23,7 +23,7 @@
 <a name="best-practices-do"></a>
 #### Do
 
-<!-- TODO need Do's -->
+* Do choose the appropriate the upload method - Full, Stream, BlobStore
 
 <a name="best-practices-don-t"></a>
 #### Don&#39;t

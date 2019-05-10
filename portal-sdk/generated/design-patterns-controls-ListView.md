@@ -3,8 +3,7 @@
  
 <a name="basics"></a>
 ### Basics
-<!-- TODO guidance ListView -->
-
+The ListView displays a simple list of items
 
 
 <!-- TODO get an IMAGE to embed here -->
@@ -23,7 +22,7 @@
 <a name="best-practices-do"></a>
 #### Do
 
-<!-- TODO need Do's -->
+* Choose the appropriate ListView option - Simple, Template, Custom
 
 <a name="best-practices-don-t"></a>
 #### Don&#39;t

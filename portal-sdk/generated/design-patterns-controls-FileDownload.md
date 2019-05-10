@@ -3,7 +3,7 @@
  
 <a name="basics"></a>
 ### Basics
-<!-- TODO guidance FileDownload -->
+The FileDownload control enables the user to download files
 
 
 
@@ -23,7 +23,7 @@
 <a name="best-practices-do"></a>
 #### Do
 
-<!-- TODO need Do's -->
+* Do choose the appropriate the download method - OAuth, Saas, BlobUri, DataUri
 
 <a name="best-practices-don-t"></a>
 #### Don&#39;t

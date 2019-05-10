@@ -3,7 +3,9 @@
  
 <a name="basics"></a>
 ### Basics
-<!-- TODO guidance DataGrid  -->
+The DataGrid control provides a rich set of features to build experiences that visualize tabular, structured data.
+
+From simple experiences that visualize basic lists to advanced scenarios such as virtualized hierarchical data; the grid control can be configured with different options such as multiple selection, custom formatters, grouping, filtering, sorting, paging and virtualization.
 
 
 
