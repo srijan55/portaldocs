@@ -1,4 +1,4 @@
-# Release Notes since 1/11/2019
+# Release Notes since 1/12/2019
 
 ## 5.0.302.19601
 0 Breaking Changes, 1 Features added and 0 Bugs Fixed
@@ -338,16 +338,4 @@
 
 ## 5.0.302.10401
 0 Breaking Changes, 3 Features added and 0 Bugs Fixed
-<table><tr><td>None</td><td>None</td><td>No public work items listed in this build.</td></tr></table>
-
-## 5.0.302.10301
-0 Breaking Changes, 1 Features added and 2 Bugs Fixed
-<table><tr><td>None</td><td>None</td><td>No public work items listed in this build.</td></tr></table>
-
-## 5.0.302.10201
-0 Breaking Changes, 1 Features added and 5 Bugs Fixed
-<table><tr><td>None</td><td>None</td><td>No public work items listed in this build.</td></tr></table>
-
-## 5.0.302.10101
-1 Breaking Changes, 0 Features added and 2 Bugs Fixed
 <table></table>
