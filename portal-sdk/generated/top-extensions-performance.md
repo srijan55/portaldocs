@@ -274,7 +274,7 @@ Sure! Book in some time in the Azure performance office hours.
 <a name="performance-best-practices-checklist"></a>
 ## Checklist
 
-- Migrate to the [hosting service](portalfx-extension-hosting-service.md#extension-hosting-service)
+- Migrate to the [hosting service](top-extensions-hosting-service.md#extension-hosting-service)
 - Enable [prewarming](http://aka.ms/portalfx/docs/prewarming), running your extension in a web worker
 - Ensure your extension isn't using [shims](#extension-load-shim-dependencies-removing-shims)
 - Migrate your extension to [dependency injection](#dependency-injected-view-models)
