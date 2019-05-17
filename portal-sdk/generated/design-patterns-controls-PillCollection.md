@@ -3,8 +3,7 @@
  
 <a name="basics"></a>
 ### Basics
-<!-- TODO guidance PillCollection -->
-
+The PillCollection is a collection of Pills used primarily for filtering and tagging
 
 
 <!-- TODO get an IMAGE to embed here -->
@@ -14,6 +13,7 @@
  
 <a name="when-to-use"></a>
 ### When to use
+Use the PillCollection when you are performing filtering (as in All Resources or Activity Logs) or showing the tags assigned to a resource (as in the Essentials control on resource overview pages).
 
 
  
@@ -24,7 +24,8 @@
 <a name="best-practices-do"></a>
 #### Do
 
-<!-- TODO need Do's -->
+* Set the **theme** to **filtering** when using the PillCollection for filtering
+* Set the **theme** to **tag** when using the PillCollection to display the tags assigned to a resource
 
 <a name="best-practices-don-t"></a>
 #### Don&#39;t
@@ -41,7 +42,7 @@
 
 <a name="developer-tips-and-tricks-interactive-control-and-sample-source-code"></a>
 #### Interactive control and sample source code
-To see the latest control, change options and get source code for your project use the interactive playground site.  [Learn more](./top-extensions-controls-playground.md).
+Go to the playground site to use the latest control and get source code for your project.  [Learn more about playground](./top-extensions-controls-playground.md).
 
 *  <a href="https://ms.portal.azure.com/?Microsoft_Azure_Playground=true#blade/Microsoft_Azure_Playground/ControlsIndexBlade/PillCollection_create_Playground" target="_blank">PillCollection in the interactive controls playground</a>
 

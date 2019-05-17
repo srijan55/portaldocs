@@ -3,7 +3,7 @@
  
 <a name="basics"></a>
 ### Basics
-Editor control is a wrapper for the "Monaco" editor which supports various languages, syntax highligting, intellisense, real-time syntax checking and validation.
+Editor control is a wrapper for the "Monaco" editor which supports various languages, syntax highlighting, intellisense, real-time syntax checking and validation.
 
 
 <!-- TODO get an IMAGE to embed here -->
@@ -60,7 +60,7 @@ Use the Editor control when the user needs to view/edit text in various language
 
 <a name="developer-tips-and-tricks-interactive-control-and-sample-source-code"></a>
 #### Interactive control and sample source code
-To see the latest control, change options and get source code for your project use the interactive playground site.  [Learn more](./top-extensions-controls-playground.md).
+Go to the playground site to use the latest control and get source code for your project.  [Learn more about playground](./top-extensions-controls-playground.md).
 
 The Editor control offers different create methods and has the following entries in the interactive controls playground
 

@@ -3,8 +3,7 @@
  
 <a name="basics"></a>
 ### Basics
-<!-- TODO guidance EditableGrid  -->
-
+The EditableGrid control provides a rich set of features to build experiences that visualize tabular, structured data and enable the user to easily add/modify data by directly entering data into the grid cells.
 
 
 <!-- TODO get an IMAGE to embed here -->
@@ -14,6 +13,7 @@
  
 <a name="when-to-use"></a>
 ### When to use
+Use the EditableGrid when the data set is suited to a tabular layout and the user can add/edit the data directly in the grid cells.
 
 
  
@@ -23,12 +23,12 @@
 <a name="best-practices-do"></a>
 #### Do
 
-<!-- TODO need Do's -->
+* Use the EditableGrid in your create experiences so the user can easily add structured data.
 
 <a name="best-practices-don-t"></a>
 #### Don&#39;t
 
-<!-- TODO need Don'ts -->
+* Don't use an EditableGrid if the user cannot add or edit data.  Use the DataGrid instead.
 
 
 
@@ -42,7 +42,7 @@
 
 <a name="developer-tips-and-tricks-interactive-control-and-sample-source-code"></a>
 #### Interactive control and sample source code
-To see the latest control, change options and get source code for your project use the interactive playground site.  [Learn more](./top-extensions-controls-playground.md).
+Go to the playground site to use the latest control and get source code for your project.  [Learn more about playground](./top-extensions-controls-playground.md).
 
 *  <a href="https://ms.portal.azure.com/?Microsoft_Azure_Playground=true#blade/Microsoft_Azure_Playground/ControlsIndexBlade/EditableGrid_create_Playground" target="_blank">EditableGrid in the interactive controls playground</a>
 
