@@ -3,7 +3,7 @@
  
 <a name="basics"></a>
 ### Basics
-Editor control is a wrapper for the "Monaco" editor which supports various languages, syntax highligting, intellisense, real-time syntax checking and validation.
+Editor control is a wrapper for the "Monaco" editor which supports various languages, syntax highlighting, intellisense, real-time syntax checking and validation.
 
 
 <!-- TODO get an IMAGE to embed here -->
