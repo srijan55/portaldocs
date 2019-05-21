@@ -4,6 +4,7 @@ The Monitor Chart control allows you to plot the metrics for your resource in Az
 
 The Monitor Chart control is available in SDK version **5.0.302.731** and above.
 
+Look here for a new version of this control -[MonitorChartV2 Control](portalfx-controls-monitor-chart-v2.md)
 <a name="monitor-chart-benefits"></a>
 ### Benefits
 - **Performance** - The charts are built to render quickly and make efficient network calls for data
@@ -53,11 +54,10 @@ const monitorChartViewModel = MonitorChart.create(bladeOrPartContainer, moni
 
 > To see a complete list of the options you can pass to the control, look at the `Fx/Controls/MonitorChart` module in Fx.d.ts, or you can [view the interfaces directly in the PortalFx repo][6].
 
-
-<a name="legacyBladeUsage"></a>
-
-<a name="monitor-chart-legacy-blades-using-the-control-on-a-locked-unlocked-blade"></a>
-### [LEGACY BLADES] Using the control on a locked/unlocked blade
+<a name="monitor-chart-legacy-blade-usage"></a>
+### Legacy blade usage
+<a name="monitor-chart-using-the-control-on-a-locked-unlocked-blade"></a>
+### Using the control on a locked/unlocked blade
 If you are not using a template blade, you can reference the `MonitorChartPart` from the `HubsExtension` in your blade's pdl.
 
 > Ensure that you have the HubsExtension.pde added to your extension. You can get the HubsExtension.pde and the MonitorChartPart.d.ts file from Microsoft.Portal.Extensions.Hubs.<<Build#>>.nupkg
@@ -274,7 +274,7 @@ From here, users can explore other metrics, pin charts to dashboard, create an a
 
 - ***My extension is still using legacy blades (locked or unlocked). Is this still applicable to me? If yes, do I get the benefits mentioned above?***
 
-    Yes, even if you are not using template blades you can [reference the MonitorChartPart](#legacyBladeUsage) from the Hubs extension.
+    Yes, even if you are not using template blades you can [reference the MonitorChartPart](#legacy-blade-usage) from the Hubs extension.
 
     If you already have an Insights/Monitoring Metrics part on your blade, instead of referencing the metrics part from Insights/Monitoring extension, you can reference the part from Hubs extension. Since the Hubs extension is always loaded when you load the portal, it will already be loaded by the time user loads your extension blade. Hence, you will not load an additional extension and get significant perf benefits.
 

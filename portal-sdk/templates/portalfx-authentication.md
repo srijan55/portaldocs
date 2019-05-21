@@ -200,7 +200,7 @@ Controller code.
 
 Tokens received from AAD contain a set of claims (key/value pairs) with information about user, including
 personally-identifiable information (PII). Note that PII will only be available to extension who fall under the
-[Azure privacy policy](https://www.microsoft.com/TrustCenter/Privacy). Extensions that don't fall under this policy
+[Azure privacy policy](https://www.microsoft.com/en-us/trustcenter/privacy). Extensions that don't fall under this policy
 (e.g. share PII with third-parties) will not have access to the token or its claims. This is due to the fact that
 Microsoft can be sued for abuse/misuse of PII as outlined by the privacy policy. Any exceptions need to be approved by
 [Ibiza LCA](mailto:ibiza-lca@microsoft.com).
@@ -216,11 +216,14 @@ MsPortalFx.Base.Security.getUserInfo() : PromiseV<MsPortalFx.Base.Security.UserI
 
 interface UserInfo {
     email: string;          // Guest accounts not homed in the current directory will have a UPN and not a valid email address
+    isOrgId: boolean;       // Boolean indicating if the user is logged in using an OrgId account
+    objectId: string;       // The object id of the logged in user. Note that the object id will be different per tenant
     givenName: string;      // Name may be empty if not provided in the token
     surname: string;        // Name may be empty if not provided in the token
-    directoryId: string;
+    directoryId: string;    // The tenant/directory id that the user is logged into
     directoryName: string;  // Directory name may be empty if calling Graph fails
     domainName: string;     // Directory domain may be empty if calling Graph fails
+    uniqueDirectoryName: string; // The unique directory name which shows both the display and domain name
 }
 ```
 

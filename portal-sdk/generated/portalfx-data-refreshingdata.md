@@ -7,10 +7,10 @@ In many scenarios, users expect to see their rendered data update implicitly as 
 
 ```typescript
 
-public robotsQuery = new MsPortalFx.Data.QueryCache<SamplesExtension.DataModels.Robot, any>({
-    entityTypeName: SamplesExtension.DataModels.RobotType,
+public robotsQuery = new MsPortalFx.Data.QueryCache<Robot, any>({
+    entityTypeName: RobotMetadata.name,
     sourceUri: () => Util.appendSessionId(RobotData._apiRoot),
-    poll: true
+    poll: true,
 });
 
 ```
@@ -100,12 +100,12 @@ As server data changes, there are scenario where the extension should *take expl
 
 ```typescript
 
-public updateRobot(robot: SamplesExtension.DataModels.Robot): FxBase.PromiseV<any> {
+public updateRobot(robot: Robot): FxBase.PromiseV<any> {
     return FxBaseNet.ajax({
         uri: Util.appendSessionId(RobotData._apiRoot + robot.name()),
         type: "PUT",
         contentType: "application/json",
-        data: ko.toJSON(robot)
+        data: ko.toJSON(robot),
     }).then(() => {
         // This will refresh the set of data that is available in the underlying data cache.
         this.robotsQuery.refreshAll();
@@ -155,12 +155,12 @@ As mentioned above, this method will issue an AJAX call (either using the '`supp
 
 ```typescript
 
-public updateRobot(robot: SamplesExtension.DataModels.Robot): FxBase.PromiseV<any> {
+public updateRobot(robot: Robot): FxBase.PromiseV<any> {
     return FxBaseNet.ajax({
         uri: Util.appendSessionId(RobotData._apiRoot + robot.name()),
         type: "PUT",
         contentType: "application/json",
-        data: ko.toJSON(robot)
+        data: ko.toJSON(robot),
     }).then(() => {
         // This will refresh the set of data that is available in the underlying data cache.
         this.robotsQuery.refreshAll();
@@ -179,10 +179,10 @@ The '`refresh`' method is useful when the server data changes are known to be sp
 
 ```typescript
 
-const promises: FxBase.Promise[] = [];
-this.sparkPlugsQuery.refresh({}, null);
-MsPortalFx.makeArray(sparkPlugs).forEach((sparkPlug) => {
-    promises.push(this.sparkPlugEntities.refresh(sparkPlug, null));
+const promises: Q.Promise<void>[] = [];
+this.enginesQuery.refresh({}, null);
+MsPortalFx.makeArray(engines).forEach((engine) => {
+    promises.push(Q(this.engineEntities.refresh(engine, null)));
 });
 return Q.all(promises);
 
@@ -190,39 +190,47 @@ return Q.all(promises);
 
 ```typescript
 
-public updateSparkPlug(sparkPlug: DataModels.SparkPlug): FxBase.Promise {
-    let promise: FxBase.Promise;
-    const uri = appendSessionId(SparkPlugData._apiRoot);
-    if (useFrameworkPortal) {
-        // Using framework portal (NOTE: this is not allowed against ARM).
-        // NOTE: do NOT use invoke API since it doesn't handle CORS.
-        promise = FxBaseNet.ajaxExtended<any>({
-            headers: { accept: applicationJson },
-            isBackgroundTask: false,
-            setAuthorizationHeader: true,
-            setTelemetryHeader: "Update" + entityType,
-            type: "PATCH",
-            uri: uri + "&api-version=" + entityVersion,
-            data: ko.toJSON(convertToResource(sparkPlug)),
-            contentType: applicationJson,
-            useFxArmEndpoint: true,
-        });
-    } else {
-        // Using local controller.
-        promise = FxBaseNet.ajax({
-            uri: uri,
-            type: "PATCH",
-            contentType: "application/json",
-            data: ko.toJSON(sparkPlug),
-        });
+public updateEngine(engine: EngineModel): Q.Promise<void> {
+   let promise: Q.Promise<any>;
+   if (useFrameworkPortal) {
+       // Using framework portal (NOTE: this is not allowed against ARM).
+       // NOTE: do NOT use invoke API since it doesn't handle CORS.
+       promise = Q(FxBaseNet.ajaxExtended<any>({
+           headers: { accept: applicationJson },
+           isBackgroundTask: false,
+           setAuthorizationHeader: true,
+           setTelemetryHeader: "Update" + entityType,
+           type: "PATCH",
+           uri: appendSessionId(EngineData._apiRoot + "&api-version=" + entityVersion),
+           data: ko.toJSON(convertToResource(engine)),
+           contentType: applicationJson,
+           useFxArmEndpoint: true,
+       }));
+   } else {
+       // Using local controller.
+       promise = FxBaseNet.ajax({
+           type: "PATCH",
+           uri: appendSessionId(EngineData._apiRoot + "?id=" + engine.id()),
+           data: ko.toJSON(convertToArmResource(engine)),
+           contentType: applicationJson,
+       });
+   }
+
+   return promise.then(() => {
+       if (useFrameworkPortal) {
+           // This will refresh the set of data that is available in the underlying data cache.
+           EngineData._debouncer.execute([this._getEngineId(engine)]);
+       } else {
+           // This will refresh the set of data that is available in the underlying data cache.
+           // The {} params let the cache know to re-fetch any data that matches these parameters.
+           // In the case of this contrived scenario, we always fetch all data.  In the future we
+           // will add a way to refresh all (or selective) caches for a given type.  The second param
+           // manages lifetime, which is not needed in this case.
+           this.enginesQuery.refresh({}, null);
+       }
+   });
     }
-
-    return promise.then(() => {
-        // This will refresh the set of data that is available in the underlying data cache.
-        SparkPlugData._debouncer.execute([this._getSparkPlugId(sparkPlug)]);
-    });
-}
-
+    
 ```
   
 Using '`refresh`', only *a single AJAX call* will be issued to the server.
@@ -236,21 +244,21 @@ In some scenarios, AJAX calls to the server to refresh cached data can be *avoid
 
 ```typescript
 
-public createRobot(robot: SamplesExtension.DataModels.Robot): FxBase.PromiseV<any> {
+public createRobot(robot: Robot): FxBase.PromiseV<any> {
     return FxBaseNet.ajax({
         uri: Util.appendSessionId(RobotData._apiRoot),
         type: "POST",
         contentType: "application/json",
-        data: ko.toJSON(robot)
+        data: ko.toJSON(robot),
     }).then(() => {
-        // This will refresh the set of data that is displayed to the client by applying the change we made to 
-        // each data set in the cache. 
-        // For this particular example, there is only one data set in the cache. 
+        // This will refresh the set of data that is displayed to the client by applying the change we made to
+        // each data set in the cache.
+        // For this particular example, there is only one data set in the cache.
         // This function is executed on each data set selected by the query params.
         // params: any The query params
         // dataSet: MsPortalFx.Data.DataSet The dataset to modify
-        this.robotsQuery.applyChanges((params, dataSet) => {
-            // Duplicates on the client the same modification to the datacache which has occured on the server.
+        this.robotsQuery.applyChanges((_ /* params */, dataSet) => {
+            // Duplicates on the client the same modification to the datacache which has occurred on the server.
             // In this case, we created a robot in the ca, so we will reflect this change on the client side.
             dataSet.addItems(0, [robot]);
         });
@@ -263,22 +271,22 @@ public createRobot(robot: SamplesExtension.DataModels.Robot): FxBase.PromiseV<an
 
 ```typescript
 
-public deleteRobot(robot: SamplesExtension.DataModels.Robot): FxBase.PromiseV<any> {
+public deleteRobot(robot: Robot): FxBase.PromiseV<any> {
     return FxBaseNet.ajax({
         uri: Util.appendSessionId(RobotData._apiRoot + robot.name()),
-        type: "DELETE"
+        type: "DELETE",
     }).then(() => {
         // This will notify the shell that the robot is being removed.
-        MsPortalFx.UI.AssetManager.notifyAssetDeleted(ExtensionDefinition.AssetTypes.Robot.name, robot.name());
+        MsPortalFx.UI.AssetManager.notifyAssetDeleted(ExtensionDefinition.AssetTypeNames.robot, robot.name());
 
-        // This will refresh the set of data that is displayed to the client by applying the change we made to 
-        // each data set in the cache. 
+        // This will refresh the set of data that is displayed to the client by applying the change we made to
+        // each data set in the cache.
         // For this particular example, there is only one data set in the cache.
         // This function is executed on each data set selected by the query params.
         // params: any The query params
         // dataSet: MsPortalFx.Data.DataSet The dataset to modify
-        this.robotsQuery.applyChanges((params, dataSet) => {
-            // Duplicates on the client the same modification to the datacache which has occured on the server.
+        this.robotsQuery.applyChanges((_ /* params */, dataSet) => {
+            // Duplicates on the client the same modification to the datacache which has occurred on the server.
             // In this case, we deleted a robot in the cache, so we will reflect this change on the client side.
             dataSet.removeItem(robot);
         });
@@ -298,22 +306,22 @@ Now, when the server data for a given cache entry *has been entirely deleted*, t
 
 ```typescript
 
-public deleteComputer(computer: SamplesExtension.DataModels.Computer): FxBase.PromiseV<any> {
+public deleteComputer(computer: Computer): FxBase.PromiseV<any> {
     return FxBaseNet.ajax({
         uri: Util.appendSessionId(ComputerData._apiRoot + computer.name()),
-        type: "DELETE"
+        type: "DELETE",
     }).then(() => {
         // This will notify the shell that the computer is being removed.
-        MsPortalFx.UI.AssetManager.notifyAssetDeleted(ExtensionDefinition.AssetTypes.Computer.name, computer.name());
+        MsPortalFx.UI.AssetManager.notifyAssetDeleted(ExtensionDefinition.AssetTypeNames.computer, computer.name());
 
-        // This will refresh the set of data that is displayed to the client by applying the change we made to 
-        // each data set in the cache. 
+        // This will refresh the set of data that is displayed to the client by applying the change we made to
+        // each data set in the cache.
         // For this particular example, there is only one data set in the cache.
         // This function is executed on each data set selected by the query params.
         // params: any The query params
         // dataSet: MsPortalFx.Data.DataSet The dataset to modify
-        this.computersQuery.applyChanges((params, dataSet) => {
-            // Duplicates on the client the same modification to the datacache which has occured on the server.
+        this.computersQuery.applyChanges((_ /* params */, dataSet) => {
+            // Duplicates on the client the same modification to the datacache which has occurred on the server.
             // In this case, we deleted a computer in the cache, so we will reflect this change on the client side.
             dataSet.removeItem(computer);
         });

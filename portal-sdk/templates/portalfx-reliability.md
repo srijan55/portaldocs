@@ -7,7 +7,7 @@ As an extension author you have a duty to uphold your experience to the reliabil
 
 | Area          | Reliability Bar     | Telemetry Action/s                  | How is it measured? |
 | ---------     | ------------------- | ------------------------            | ------------------- |
-| Extension     | See Power BI        | InitializeExtensions/LoadExtensions | (( # of LoadExtensions starts - # of InitializeExtensions or LoadExtensions failures ) /  # of load extension starts ) * 100 |
+| Extension     | See Power BI        | ExtensionLoad | (# of ExtensionLoad completes / (# of ExtensionLoad completes + cancels)) * 100 |
 | Blade         | See Power BI        | BladeLoaded vs BladeLoadErrored     | (( # of BladeLoaded started - # of BladeLoadErrored's) / # of BladeLoaded started) * 100 |
 | Part          | See Power BI        | PartLoaded                          | (( # of PartLoaded started - # of PartLoaded canceled) / # of PartLoaded started) * 100 |
 
@@ -52,7 +52,6 @@ There are a few items that the FX team advises all extensions to follow.
 The FX provides an [Extension Hosting Service](portalfx-extension-hosting-service.md) which handles Geo-distribution.
 To assess your extensions performance by data center see the [Extension performance/reliability report][Ext-Perf/Rel-Report]
 - Turning on [IIS compression](https://technet.microsoft.com/en-us/library/cc730629(v=ws.10).aspx)
-- [Run portalcop to identify and resolve common performance issues](portalfx-performance-portalcop.md)
 
 ### Code optimisations to improve extension reliability
 

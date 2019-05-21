@@ -1,3 +1,2 @@
-{"gitdown": "contents", "maxLevel": 2}
 
-{"gitdown": "include-file", "file": "./portalfx-extension-partner-request-process.md"}
+The page you requested has moved to [top-extensions-partner-request.md](top-extensions-partner-request.md). 

@@ -7,8 +7,9 @@ Ibiza portal tracks several pieces of information as users navigate through the 
 > **Note**: Currently, telemetry is made available to partners through Kusto. All Azure employees should have access, if you don't have access ensure you have joined your team's standard access group and it's listed here [http://aka.ms/standardaccess](http://aka.ms/standardaccess). If it is not listed then please reach out to [Ibiza Telemetry](mailto:ibiza-telemetry@microsoft.com).
 
 You can access our Kusto cluster using <a href="https://azportal.kusto.windows.net/AzurePortal" target="_blank" title="Kusto">Kusto Explorer</a> or 
-<a href="https://azportal.kusto.windows.net/AzurePortal?web=1" target="_blank" title="KustoWeb">Kusto Web Explorer</a>. 
-Our Kusto cluster contains two databases: 
+<a href="https://azportal.kusto.windows.net/AzurePortal?web=1" target="_blank" title="KustoWeb">Kusto Web Explorer</a>.
+
+Our Kusto cluster contains two databases:
 
 * AzurePortal - which contains the raw data
 * AzPtlCosmos - which is our main telemetry database used in all the official dashboards and reports. Data from this database is deduped, geo-coded, expanded and has test traffic filtered out.
@@ -23,7 +24,7 @@ You can read more [here](portalfx-telemetry-kusto-databases.md) about Kusto and 
 
 ### Tracked Actions
 
-{"gitdown": "include-file", "file": "portalfx-telemetry-actions.md"}
+[top-telemetry.md](top-telemetry#overview-viewing-telemetry-custom-queries-tracked-actions)
 
 ## Logging
 
@@ -99,7 +100,7 @@ Following are some of the dashboards that we support. If you do not have access 
 
 |Name                            | PowerBi Link                                                                                                                                     | Metrics Description                                                                    |
 |--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
-|Portal Performance Dashboard    | [http://aka.ms/portalfx/dashboard/extensionperf](http://aka.ms/portalfx/dashboard/extensionperf)                                         | [Perf Docs](portalfx-performance.md)                              |
+|Portal Performance Dashboard    | [http://aka.ms/portalfx/dashboard/extensionperf](http://aka.ms/portalfx/dashboard/extensionperf)                                         | [Perf Docs](top-extensions-performance.md)                              |
 |Portal Reliability Dashboard    | [http://aka.ms/portalfx/dashboard/extensionperf](http://aka.ms/portalfx/dashboard/extensionperf)                                          | [Reliability Docs](portalfx-reliability.md)                       |
 |Portal Create Dashboard         | [http://aka.ms/portalfx/dashboard/PortalCreate](http://aka.ms/portalfx/dashboard/PortalCreate)                                                   | [Create Docs](portalfx-telemetry-create.md)                       |
 |Extension Errors Dashboard      | [http://aka.ms/portalfx/dashboard/ExtensionErrors](http://aka.ms/portalfx/dashboard/ExtensionErrors)                                             | [Extension Errors Docs](portalfx-telemetry-extension-errors.md)   |

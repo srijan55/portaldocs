@@ -6,6 +6,7 @@
     * [Showing up in All Resources and resource group resources](#assets-showing-up-in-all-resources-and-resource-group-resources)
     * [Handling permissions for RBAC](#assets-handling-permissions-for-rbac)
     * [Special-casing ARM resource kinds](#assets-special-casing-arm-resource-kinds)
+    * [Displaying multiple kinds together in a single browse view](#assets-displaying-multiple-kinds-together-in-a-single-browse-view)
     * [Handling deleted resources](#assets-handling-deleted-resources)
     * [Linking notifications to assets](#assets-linking-notifications-to-assets)
     * [ARM RP and resource type metadata](#assets-arm-rp-and-resource-type-metadata)
@@ -54,6 +55,7 @@ To define your asset type, simply add the following snippet to PDL:
     LowerSingularDisplayName="{Resource MyAsset.lowerSingular, Module=ClientResources}"
     LowerPluralDisplayName="{Resource MyAsset.lowerPlural, Module=ClientResources}"
     Keywords="{Resource MyAsset.keywords, Module=ClientResources}"
+    Description="{Resource MyAsset.description, Module=ClientResources}"
     Icon="{Resource Content.MyExtension.Images.myAsset, Module=./../_generated/Svg}"
     BladeName="MyAssetBlade"
     PartName="MyAssetPart"
@@ -102,6 +104,82 @@ Remember, your part and blade should both have a single `id` input parameter, wh
 
 If your asset type is in preview, set the `IsPreview="true"` property. If the asset type is GA, simply remove the property (the default is `false`).
 
+<a name="assets-defining-your-asset-type-how-to-hide-your-asset-in-different-environments"></a>
+#### How to hide your asset in different environments
+
+You can hide your asset in different environments by setting the hideassettypes feature flag in your config to a comma-separated list of asset type names.
+
+<a href="https://msit.microsoftstream.com/video/7399869a-4f8f-415e-9346-5b77f069b567?st=50" target="_blank">
+  Watch the Hiding Asset Types video here
+  <img src="../media/portalfx-assets/hidingassettypes.png" />
+</a>
+
+<a name="assets-defining-your-asset-type-how-to-hide-your-asset-in-different-environments-self-hosted"></a>
+##### Self hosted
+
+Replace '*' with the desired environment, for documentation regarding enabling feature flags in self hosted extensions [click here.](portalfx-extension-flags.md#feature-flags)
+
+```xml
+        <Setting name="Microsoft.StbPortal.Website.Configuration.ApplicationConfiguration.DefaultQueryString" value="{
+            '*': {
+                     'microsoft_azure_compute_hideassettypes':"AzureContainerService,ContainerGroup,ManagedClusters,VirtualWan"
+            }
+        }" />
+```
+
+<a name="assets-defining-your-asset-type-how-to-hide-your-asset-in-different-environments-hosting-service"></a>
+##### Hosting service
+
+If you’re using the hosting service, you can do this by updating your domainname.json (e.g. portal.azure.cn.json file)
+
+```json
+    {
+      "features": {
+        "hideassettypes": "AzureContainerService,ContainerGroup,ManagedClusters,VirtualWan"
+      }
+    }
+```
+
+<a name="assets-defining-your-asset-type-how-to-hide-your-asset-in-different-environments-hosting-service-testing-your-hidden-asset"></a>
+###### Testing your hidden asset
+
+To test enable your hidden asset for testing purposes, you will need to update the hide asset feature flag to exclude the asset you want to show and ensure you have feature.canmodifyextensions set.
+
+For the desired environment append the following feature flags.
+> If you want to test showing all hidden assets, you can specify all the assets as a comma seperated list to the 'showassettypes' feature flag.
+
+```txt
+    ?feature.showassettypes=MyNewAsset
+    &microsoft_azure_mynewextension=true
+    &feature.canmodifyextensions=true
+```
+
+For example:
+https://rc.portal.azure.com/?feature.showassettypes=VirtualMachine&microsoft_azure_compute=true&feature.canmodifyextensions=true
+
+<a name="assets-defining-your-asset-type-handling-empty-browse"></a>
+#### Handling empty browse
+
+The framework offers the ability to display a description and links in the case that the users filters return no results.
+
+>NOTE: This will also display if the user visits the browse experience and they have not yet created the given resource.
+
+![Empty browse](../media/portalfx-assets/empty-browse.png)
+
+To opt in to this experience you need to provide a `description` and a `link`, these are properties that you provide on your Asset.
+
+```xml
+<AssetType  
+    Name="MyAsset"
+    ...
+    Description="{Resource MyAsset.description, Module=ClientResources}">
+    ...
+    <Link Title="{Resource MyAsset..linkTitle1, Module=ClientResources}" Uri="http://www.bing.com"/>
+    <Link Title="{Resource MyAsset.linkTitle2, Module=ClientResources}" Uri="http://www.bing.com"/>
+    ...
+  </AssetType>
+```
+
 <a name="blades-parts-commands"></a>
 <a name="assets-blades-parts-and-commands"></a>
 ### Blades, parts, and commands
@@ -140,8 +218,8 @@ The portal supports overriding the following default behaviors based on the reso
 * Hiding resources in Browse and resource groups
 * Displaying separate icons throughout the portal
 * Launching different blades when an asset is opened
+* Merging kinds to display in a single browse view
 
-Kinds can also be used to
 
 The kind value can be whatever value makes sense for your scenarios. Just add supported kinds to the `AssetType` PDL:
 
@@ -180,6 +258,79 @@ If different kinds need to opt in to a static resource menu overview item, add t
 <Kind ...>
   <StaticOverview />
 </Kind>
+```
+
+<a name="assets-displaying-multiple-kinds-together-in-a-single-browse-view"></a>
+### Displaying multiple kinds together in a single browse view
+
+There are two options for displaying multiple kinds as a single view. Both cases require exposing a entry for your asset. 
+
+1. Merging multiple kinds together via any of each kind's browse entry (MergedKind)
+1. Exposing a logical kind (KindGroup) which acts as a single entry point for multiple kinds.
+
+<a name="assets-displaying-multiple-kinds-together-in-a-single-browse-view-mergedkind"></a>
+#### MergedKind
+
+To expose your resources as a merged kind you need to define the kinds you wish to merge as below.
+
+```xml
+<AssetType Name="Watch">
+    <ResourceType ResourceTypeName="Microsoft.Test/watches"
+                  ApiVersion="2017-04-01">
+      <!--
+        The 'garmin-merged' kind has two merged kinds, 'garmin' and 'garmin2'. The 'garmin-merged' kind is not a real
+        kind and is not emitted to the manifest as a kind, it is organizational only.
+      -->
+      <MergedKind Name="garmin-merged">
+        <Kind Name="garmin"
+              CompositeDisplayName="{Resource AssetTypeNames.Watch.Garmin, Module=ClientResources}"
+              Icon="{Svg IsLogo=true, File=../../Svg/Watches/garmin.svg}"
+              BladeName="GarminWatchBlade"
+              PartName="GarminWatchTile" />
+        <Kind Name="garmin2"
+              CompositeDisplayName="{Resource AssetTypeNames.Watch.Garmin2, Module=ClientResources}"
+              Icon="{Svg IsLogo=true, File=../../Svg/Watches/garmin2.svg}"
+              BladeName="Garmin2WatchBlade"
+              PartName="Garmin2WatchTile" />
+      </MergedKind>
+    </ResourceType>
+  </AssetType>
+```
+
+<a name="assets-displaying-multiple-kinds-together-in-a-single-browse-view-kindgroup"></a>
+#### KindGroup
+
+To expose your resources as grouped as a single kind you will need to define the below.
+Note both lg and samsung in the example below will be exposed as entries too.
+
+```xml
+<AssetType Name="Watch">
+    <ResourceType ResourceTypeName="Microsoft.Test/watches"
+                  ApiVersion="2017-04-01">
+      <Kind Name="lg"
+            CompositeDisplayName="{Resource AssetTypeNames.Watch.LG, Module=ClientResources}"
+            Icon="{Svg IsLogo=true, File=../../Svg/Watches/lg.svg}"
+            BladeName="LgWatchBlade"
+            PartName="LgWatchTile" />
+      <Kind Name="samsung"
+            CompositeDisplayName="{Resource AssetTypeNames.Watch.Samsung, Module=ClientResources}"
+            Icon="{Svg IsLogo=true, File=../../Svg/Watches/samsung.svg}"
+            BladeName="SamsungWatchBlade"
+            PartName="SamsungWatchTile" />
+      <!--
+        The 'android' kind group wraps the lg and samsung kinds into a single kind. The 'android' kind is an abstract
+        kind. There should never be a watch with the kind set to 'android'. Instead it's used to group kinds into
+        a single list. However, 'lg' watches and be seen separately, same with 'samsung' watches. The 'android' kind
+        will be emitted to the manifest as a kind.
+      -->
+      <KindGroup Name="android"
+            CompositeDisplayName="{Resource AssetTypeNames.Watch.Android, Module=ClientResources}"
+            Icon="{Svg IsLogo=true, File=../../Svg/Watches/android.svg}">
+        <KindReference KindName="lg" />
+        <KindReference KindName="samsung" />
+      </KindGroup>
+    </ResourceType>
+  </AssetType>
 ```
 
 <a name='notify-asset-deleted'></a>

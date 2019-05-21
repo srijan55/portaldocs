@@ -1,6 +1,5 @@
 * [Developing Forms](#developing-forms)
     * [Loading, editing and saving data](#developing-forms-loading-editing-and-saving-data)
-    * [Laying out your UI on the blade](#developing-forms-laying-out-your-ui-on-the-blade)
     * [Field Validation](#developing-forms-field-validation)
     * [Working with Edit Scopes](#developing-forms-working-with-edit-scopes)
     * [Integrating Forms with Commands](#developing-forms-integrating-forms-with-commands)
@@ -61,24 +60,24 @@ read the data from the server & `saveEditScopeChanges` will write it back:
 ```typescript
 
 const editScopeCache = EditScopeCache.createNew<WebsiteModel, number>({
-    supplyExistingData: (websiteId, lifetime) => {
+    supplyExistingData: (websiteId) => {
         return FxBaseNet.ajax({
             uri: Util.appendSessionId(MsPortalFx.Base.Resources.getAppRelativeUri("/api/Websites/" + websiteId)), // this particular endpoint requires sessionId to be in query string
             type: "GET",
             dataType: "json",
             cache: false,
-            contentType: "application/json"
+            contentType: "application/json",
         }).then((data: any) => {
             // after you get the data from the ajax query you can do whatever transforms
             // you want in it to turn it into the model type you've defined
             return {
                 id: ko.observable(data.id),
                 name: ko.observable(data.name),
-                running: ko.observable(data.running)
+                running: ko.observable(data.running),
             };
         });
     },
-    saveEditScopeChanges: (websiteId, editScope, edits, lifetime, dataToUpdate) => {
+    saveEditScopeChanges: (websiteId, editScope) => {
         // get the website from the edit scope
         const website = editScope.root;
 
@@ -93,18 +92,18 @@ const editScopeCache = EditScopeCache.createNew<WebsiteModel, number>({
             dataType: "json",
             cache: false,
             contentType: "application/json",
-            data: serializableWebsite
+            data: serializableWebsite,
         }).then(() => {
             // Instruct the EditScope to accept the user-authored, client-side changes as the new state of the
             // EditScope after the 'saveChanges' has completed successfully.
             // ('AcceptClientChanges' is the default behavior.  This promise could also be resolved with 'null' or 'undefined'.)
             return {
-                action: Data.AcceptEditScopeChangesAction.AcceptClientChanges
+                action: Data.AcceptEditScopeChangesAction.AcceptClientChanges,
             };
         }).finally(() => {
             this._saving(false);
         });
-    }
+    },
 });
 
 ```
@@ -143,16 +142,16 @@ const websiteName = new TextBox.ViewModel(
     {
         label: ko.observable(ClientResources.masterDetailEditWebsiteNameLabel),
         validations: ko.observableArray([
-            new FxViewModels.RequiredValidation(ClientResources.masterDetailEditWebsiteNameRequired)
+            new FxViewModels.RequiredValidation(ClientResources.masterDetailEditWebsiteNameRequired),
         ]),
-        valueUpdateTrigger: ValueUpdateTrigger.Input // by default textboxes only update the value when the user moves focus. Since we don't do any expensive validation we can get updates on keypress
+        valueUpdateTrigger: ValueUpdateTrigger.Input, // by default textboxes only update the value when the user moves focus. Since we don't do any expensive validation we can get updates on keypress
     });
 
 // Section
 this.section = new Section.ViewModel(this._ltm, {
     children: ko.observableArray<any>([
-        websiteName
-    ])
+        websiteName,
+    ]),
 });
 
 ```
@@ -180,9 +179,9 @@ saveCommand.command = {
         const editScopeDirty = !!editScope ? editScope.dirty() : false;
         return !this._saving() && editScopeDirty;
     }),
-    execute: (context: any): FxBase.Promise => {
+    execute: (): FxBase.Promise => {
         return this._editScopeView.editScope().saveChanges();
-    }
+    },
 };
 
 // set up discard command
@@ -196,10 +195,10 @@ discardCommand.command = {
         const editScopeDirty = !!editScope ? editScope.dirty() : false;
         return !this._saving() && editScopeDirty;
     }),
-    execute: (context: any): FxBase.Promise => {
+    execute: (): FxBase.Promise => {
         this._editScopeView.editScope().revertAll();
         return null;
-    }
+    },
 };
 
 this.commandBar = new Toolbars.Toolbar(this._ltm);
@@ -211,52 +210,7 @@ Since we're using the edit scope the save/disard commands can just call the `sav
 to trigger the right action.
 
 
-<a name="developing-forms-laying-out-your-ui-on-the-blade"></a>
-## Laying out your UI on the blade
-
-While blade templates allow you to layout your controls as particular DOM elements we generally recommend an alternative approach
-of binding a section view model into the DOM and then adding control view models to the section's `children` observable array.
-The section provides default styling in terms of spacing and margins and an easier way to deal with dynamically adding/removing controls.
-You can even use the CustomHtml control to author HTML in the middle of an autogenerated layout. A large majority of blades can use these
-two controls to avoid having to put much HTML in your blade template but of course placing the controls in the DOM yourself is always
-an option if needed.
-
-As mentioned above to use a section you'll need to create a section view model and bind it into the DOM in your blade template using the 
-'pcControl' binding handler. Then add all the controls you would like to be displayed to the `children` observable on the section. 
-By default this lays them out one after the other on a blade. By using the section's `style` property you can achieve other layouts 
-as well such as a table layout with controls in multiple rows and columns, a list of tabs or a combination of layouts.
-
-Follow [this link](http://aka.ms/portalfx/samples#blade/SamplesExtension/SDKMenuBlade/formsallup) and then click on 'Basic Create Form' for an example and this of what it looks like.
-This is the code to create the section:
-
-```typescript
-
-const mySectionOptions: Section.Options = {
-    children: ko.observableArray<any>([
-        this.myTextBox,
-        this.myChecklessTextBox,
-        this.myPasswordBox,
-        this.myGroupDropDown,
-        myDependentSection,
-        this.myCheckBox,
-        this.mySelector,
-        this.myDropDown,
-    ])
-};
-this.mySection = new Section.ViewModel(this._container, mySectionOptions);
-
-```
-
-And the template is just binding the section into the DOM:
-
-```
-﻿<div class="msportalfx-form" data-bind="pcControl: mySection"></div>
-```
-
-Since it will autogenerate the layout for all of it's children.
-
-
-[FormSection]: ../media/portalfx-forms-sections/forms-sections.png
+The page you requested has moved to [top-extensions-forms.md#form-layout](top-extensions-forms.md#form-layout). 
 
 
 <a name="developing-forms-field-validation"></a>
@@ -586,7 +540,7 @@ this.textBoxReadWriteAccessor = new MsPortalFx.ViewModels.Forms.TextBox.ViewMode
         },
         writeToEditScope: (data: FormIntegratedFormData.FormIntegratedFormData, newValue: string): void => {
             data.state2(newValue);
-        }
+        },
     }),
     textBoxReadWriteAccessorOptions);
 
@@ -612,10 +566,10 @@ MsPortalFx.Data.Metadata.setTypeMetadata("GridItem", {
 properties: {
     key: null,
     option: null,
-    value: null
+    value: null,
 },
 entityType: true,
-idProperties: [ "key" ]
+idProperties: [ "key" ],
 });
 
 ```
@@ -690,8 +644,8 @@ This '`getEntityArrayWithEdits`' is particularly useful in ParameterProvider's '
 
 ```typescript
 
-this.parameterProvider = new MsPortalFx.ViewModels.ParameterProvider<DataModels.ServerConfig[], KnockoutObservableArray<DataModels.ServerConfig>>(container, {
-    editScopeMetadataType: DataModels.ServerConfigType,
+this.parameterProvider = new MsPortalFx.ViewModels.ParameterProvider<ServerConfig[], KnockoutObservableArray<ServerConfig>>(container, {
+    editScopeMetadataType: ServerConfigMetadata.name,
     mapIncomingDataForEditScope: (incoming) => {
         return ko.observableArray(incoming);  // Editable grid can only bind to an observable array.
     },
@@ -699,8 +653,8 @@ this.parameterProvider = new MsPortalFx.ViewModels.ParameterProvider<DataModels.
         const editScope = this.parameterProvider.editScope();
 
         // Use EditScope's 'getEntityArrayWithEdits' to return an array with all created/updated/deleted items.
-        return editScope.getEntityArrayWithEdits<DataModels.ServerConfig>(outgoing).arrayWithEdits;
-    }
+        return editScope.getEntityArrayWithEdits<ServerConfig>(outgoing).arrayWithEdits;
+    },
 });
 
 ```
@@ -710,22 +664,22 @@ And there is a corresponding '`applyArrayAsEdits`' EditScope method that simplif
 
 ```typescript
 
-this.itemsCollector = new MsPortalFx.ViewModels.ParameterCollector<DataModels.ServerConfig[]>(container, {
+this.itemsCollector = new MsPortalFx.ViewModels.ParameterCollector<ServerConfig[]>(container, {
     selectable: this.itemsSelector.selectable,
     supplyInitialData: () => {
         const editScope = this._editScopeView.editScope();
 
         // Use EditScope's 'getEntityArrayWithEdits' to develop an array with all created/updated/deleted items
         // in this entity array.
-        return editScope.getEntityArrayWithEdits<DataModels.ServerConfig>(editScope.root.serverConfigs).arrayWithEdits;
+        return editScope.getEntityArrayWithEdits<ServerConfig>(editScope.root.serverConfigs).arrayWithEdits;
     },
-    receiveResult: (result: DataModels.ServerConfig[]) => {
+    receiveResult: (result: ServerConfig[]) => {
         const editScope = this._editScopeView.editScope();
 
         // Use EditScope's 'applyArrayWithEdits' to examine the array returned from the Provider Blade
         // and apply any differences to our EditScope entity array in terms of created/updated/deleted entities.
         editScope.applyArrayAsEdits(result, editScope.root.serverConfigs);
-    }
+    },
 });
 
 ```
@@ -764,9 +718,9 @@ const wrapperTypeMetadataName = "ParameterProviderWithEditableStringsBladeViewMo
 MsPortalFx.Data.Metadata.setTypeMetadata(wrapperTypeMetadataName, {
 name: wrapperTypeMetadataName,
 properties: {
-    value: null
+    value: null,
 },
-entityType: true
+entityType: true,
 });
 
 export interface StringWrapperType {
@@ -786,7 +740,7 @@ this.parameterProvider = new MsPortalFx.ViewModels.ParameterProvider<string[], K
         // Editable grid only accepts an array of editable entities (that is, objects and not strings).
         const wrappedStrings = incoming.map((str) => {
             return {
-                value: ko.observable(str)
+                value: ko.observable(str),
             };
         });
         return ko.observableArray(wrappedStrings);  // Editable grid can only bind to an observable array.
@@ -801,7 +755,7 @@ this.parameterProvider = new MsPortalFx.ViewModels.ParameterProvider<string[], K
         return entityArrayWithEdits.arrayWithEdits.map((wrapper) => {
             return wrapper.value();
         });
-    }
+    },
 });
 
 ```  

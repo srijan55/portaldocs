@@ -1,3 +1,2 @@
-{"gitdown": "contents", "maxLevel": 2}
 
-{"gitdown": "include-file", "file": "./portalfx-extension-QnA.md"}
+{"gitdown": "include-file", "file": "../templates/portalfx-stackoverflow.md"}
