@@ -1,10 +1,10 @@
 
 <a name="getting-started"></a>
 # Getting Started
-* [Understanding the Azure Portal Architecture](portalfx-howitworks.md#understanding-the-azure-portal-architecture)
-* [Understanding the Azure Portal Extension Architecture](portalfx-howitworks.md#understanding-the-azure-portal-extension-architecture)
 
-* [Getting started with the Portal SDK](portalfx-creating-extensions.md#getting-started-with-the-portal-sdk)
+* [Getting Started with the Portal SDK](top-extensions-getting-started.md#getting-started-with-the-portal-sdk)
+* [Questions?](top-extensions-getting-started.md#questions)
+* [FAQ:](top-extensions-getting-started.md#faq)
 
 * [Samples extension](portalfx-sample-extensions.md#samples-extension)
 
@@ -12,6 +12,8 @@
 <a name="common-scenarios"></a>
 # Common scenarios
 * [Building browse experiences](portalfx-browse.md#building-browse-experiences)
+    * [No-code Browse](portalfx-browse.md#no-code-browse)
+    * [Custom blade](portalfx-browse.md#custom-blade)
 
 * [Building create experiences](portalfx-create.md#building-create-experiences)
 * [Building custom create forms](portalfx-create.md#building-custom-create-forms)
@@ -23,25 +25,14 @@
 
 * [Defining Blades and Parts using TypeScript decorators (a.k.a. 'no-PDL')](portalfx-no-pdl-programming.md#defining-blades-and-parts-using-typescript-decorators-a-k-a-no-pdl)
 
-* [Parts (a.k.a. tiles)](portalfx-parts.md#parts-a-k-a-tiles)
 
-* [Blades](portalfx-blades.md#blades)
 
 * [Developing Forms](portalfx-forms.md#developing-forms)
     * [FAQ](portalfx-forms.md#faq)
 
-* [Controls](portalfx-controls.md#controls)
-    * [Date and Time](portalfx-controls.md#date-and-time)
-    * [Drop downs](portalfx-controls.md#drop-downs)
-    * [Editors](portalfx-controls.md#editors)
-    * [Forms](portalfx-controls.md#forms)
-    * [Lists](portalfx-controls.md#lists)
-    * [Helpers and Indicators](portalfx-controls.md#helpers-and-indicators)
-    * [Visualizing Data](portalfx-controls.md#visualizing-data)
 
 * [Monitor Chart](portalfx-controls-monitor-chart.md#monitor-chart)
 
-* [EditScopeless Forms](portalfx-editscopeless-forms.md#editscopeless-forms)
 
 * [Using Fx/Controls in EditScope backed forms](portalfx-fxcontrols-editscope-forms.md#using-fx-controls-in-editscope-backed-forms)
 
@@ -51,7 +42,6 @@
 * [Calling ARM](portalfx-authentication.md#calling-arm)
 * [Calling alternate resources](portalfx-authentication.md#calling-alternate-resources)
 
-* [Working with data](portalfx-data.md#working-with-data)
 
 * [Introduction to Parameter Collection](portalfx-parameter-collection-overview.md#introduction-to-parameter-collection)
     * [Roles](portalfx-parameter-collection-overview.md#roles)
@@ -69,7 +59,6 @@
 
 * [Essentials panel](portalfx-essentials.md#essentials-panel)
 
-* [Resource menu](portalfx-resourcemenu.md#resource-menu)
 
 * [Defining permissions and checking access](portalfx-permissions.md#defining-permissions-and-checking-access)
 
@@ -86,13 +75,9 @@
 
 <a name="debugging"></a>
 # Debugging
-* [Debugging](portalfx-debugging.md#debugging)
 
 * [Debugging extension load failures](portalfx-debugging-extension-load-failures.md#debugging-extension-load-failures)
 
-* [Testing in production](portalfx-testinprod.md#testing-in-production)
-* [Handling obsolete bundles](portalfx-testinprod.md#handling-obsolete-bundles)
-* [Marking automated tests as test/synthetic traffic](portalfx-testinprod.md#marking-automated-tests-as-test-synthetic-traffic)
 
 
 <a name="other"></a>

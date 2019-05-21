@@ -43,7 +43,7 @@ for static resources (images, scripts, etc.). This shifts the location of the mo
 
 The portal is deployed continuously. On any given day, multiple bug fixes, new features, and API changes may be deployed
 to production. When a new version of the portal is deployed to production, the corresponding version of the SDK is
-automatically released to the [download center](downloads.md). The download center contains the change log for the given
+automatically released to the [download center](/portal-sdk/generated/downloads.md). The download center contains the change log for the given
 release, including bug fixes, new features, and a log of breaking changes.
 
 <a name="before-deploying-your-extension"></a>
@@ -159,7 +159,7 @@ We also recommend that extensions use a CDN, such as Azure CDN, to move the most
 
 Having a presence in all geographies is important for good performance.
 We see much higher latencies and reliability issues when servers are not geo-located with their users.
-(For more tips, see the [performance page](portalfx-performance.md).)
+(For more tips, see the [performance page](top-extensions-performance.md).)
 
 In order to deploy to all regions:
 

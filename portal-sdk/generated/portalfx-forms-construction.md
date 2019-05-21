@@ -17,24 +17,24 @@ read the data from the server & `saveEditScopeChanges` will write it back:
 ```typescript
 
 const editScopeCache = EditScopeCache.createNew<WebsiteModel, number>({
-    supplyExistingData: (websiteId, lifetime) => {
+    supplyExistingData: (websiteId) => {
         return FxBaseNet.ajax({
             uri: Util.appendSessionId(MsPortalFx.Base.Resources.getAppRelativeUri("/api/Websites/" + websiteId)), // this particular endpoint requires sessionId to be in query string
             type: "GET",
             dataType: "json",
             cache: false,
-            contentType: "application/json"
+            contentType: "application/json",
         }).then((data: any) => {
             // after you get the data from the ajax query you can do whatever transforms
             // you want in it to turn it into the model type you've defined
             return {
                 id: ko.observable(data.id),
                 name: ko.observable(data.name),
-                running: ko.observable(data.running)
+                running: ko.observable(data.running),
             };
         });
     },
-    saveEditScopeChanges: (websiteId, editScope, edits, lifetime, dataToUpdate) => {
+    saveEditScopeChanges: (websiteId, editScope) => {
         // get the website from the edit scope
         const website = editScope.root;
 
@@ -49,18 +49,18 @@ const editScopeCache = EditScopeCache.createNew<WebsiteModel, number>({
             dataType: "json",
             cache: false,
             contentType: "application/json",
-            data: serializableWebsite
+            data: serializableWebsite,
         }).then(() => {
             // Instruct the EditScope to accept the user-authored, client-side changes as the new state of the
             // EditScope after the 'saveChanges' has completed successfully.
             // ('AcceptClientChanges' is the default behavior.  This promise could also be resolved with 'null' or 'undefined'.)
             return {
-                action: Data.AcceptEditScopeChangesAction.AcceptClientChanges
+                action: Data.AcceptEditScopeChangesAction.AcceptClientChanges,
             };
         }).finally(() => {
             this._saving(false);
         });
-    }
+    },
 });
 
 ```
@@ -99,16 +99,16 @@ const websiteName = new TextBox.ViewModel(
     {
         label: ko.observable(ClientResources.masterDetailEditWebsiteNameLabel),
         validations: ko.observableArray([
-            new FxViewModels.RequiredValidation(ClientResources.masterDetailEditWebsiteNameRequired)
+            new FxViewModels.RequiredValidation(ClientResources.masterDetailEditWebsiteNameRequired),
         ]),
-        valueUpdateTrigger: ValueUpdateTrigger.Input // by default textboxes only update the value when the user moves focus. Since we don't do any expensive validation we can get updates on keypress
+        valueUpdateTrigger: ValueUpdateTrigger.Input, // by default textboxes only update the value when the user moves focus. Since we don't do any expensive validation we can get updates on keypress
     });
 
 // Section
 this.section = new Section.ViewModel(this._ltm, {
     children: ko.observableArray<any>([
-        websiteName
-    ])
+        websiteName,
+    ]),
 });
 
 ```
@@ -136,9 +136,9 @@ saveCommand.command = {
         const editScopeDirty = !!editScope ? editScope.dirty() : false;
         return !this._saving() && editScopeDirty;
     }),
-    execute: (context: any): FxBase.Promise => {
+    execute: (): FxBase.Promise => {
         return this._editScopeView.editScope().saveChanges();
-    }
+    },
 };
 
 // set up discard command
@@ -152,10 +152,10 @@ discardCommand.command = {
         const editScopeDirty = !!editScope ? editScope.dirty() : false;
         return !this._saving() && editScopeDirty;
     }),
-    execute: (context: any): FxBase.Promise => {
+    execute: (): FxBase.Promise => {
         this._editScopeView.editScope().revertAll();
         return null;
-    }
+    },
 };
 
 this.commandBar = new Toolbars.Toolbar(this._ltm);

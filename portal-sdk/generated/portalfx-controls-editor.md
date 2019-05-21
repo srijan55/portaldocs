@@ -47,7 +47,7 @@ export class SampleEditorViewModel extends MsPortalFx.ViewModels.Controls.Docume
                "        x = x + 'The number is ' + i;",
                "    }",
                "    document.getElementById('demo').innerHTML = x;",
-               "}"
+               "}",
            ].join("\n");
 
        // Set up whether or not to show line numbers and what the tab size is in the editor.
@@ -66,6 +66,7 @@ export class SampleEditorViewModel extends MsPortalFx.ViewModels.Controls.Docume
 /**
 * ViewModel class for the editor sample part.
 */
+@Di.Class("viewModel")
 export class EditorInstructionsPartViewModel
    implements Def.EditorInstructionsPartViewModel.Contract {
 
@@ -83,13 +84,9 @@ export class EditorInstructionsPartViewModel
     * Creates a new instance of the EditorInstructionsPartViewModel class.
     *
     * @param container The view model for the part container.
-    * @param initialState The initial state for the part.
     * @param dataContext The data context.
     */
-   constructor(
-       container: MsPortalFx.ViewModels.PartContainerContract,
-       initialState: any,
-       dataContext: ControlsArea.DataContext) {
+   constructor(container: MsPortalFx.ViewModels.PartContainerContract) {
 
        // Initialize the editor view model.  If we were getting the data from teh data context, we would pass it in here.
        this.editorVM = new SampleEditorViewModel(container);
@@ -101,7 +98,7 @@ export class EditorInstructionsPartViewModel
                this.editorVM.save.execute().then(() => {
                    // Here is where you would put code that is executed after any changes have been written back to the content property on the viewmodel.
                });
-           }
+           },
        });
    }
 }

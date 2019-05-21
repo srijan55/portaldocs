@@ -1,20 +1,9 @@
-* [How to expose config settings for consumption in the client](#how-to-expose-config-settings-for-consumption-in-the-client)
-* [Step by step walkthrough](#step-by-step-walkthrough)
 
-
-<tags
-    ms.service="portalfx"
-    ms.workload="portalfx"
-    ms.tgt_pltfrm="portalfx"
-    ms.devlang="portalfx"
-    ms.topic="get-started-article"
-    ms.date="12/26/2015"
-    ms.author="lixinxu"/>    
-
+<<<<<<< HEAD
 <a name="how-to-expose-config-settings-for-consumption-in-the-client"></a>
 ## How to expose config settings for consumption in the client
 
-Configuration settings are commonly used to control an application's behavior. For example, using timeout values, page size, endpoints, ARM version number, etc. Using the .NET framework, managed code can load config easily but in the case of portal extensions most of the extensions implementation is JavaScript running on client side.  By allowing the client code in extensions to gain access to configuration settings the portal framework provides a way to get the configuration and expose it in `window.fx.environment`. The following steps detail how it works:
+Configuration settings are commonly used to control an application's behavior. For example, using timeout values, page size, endpoints, ARM version number, etc. Using the .NET framework, managed code can load config easily but in the case of portal extensions most of the extensions implementation is JavaScript running on client side.  By allowing the client code in extensions to gain access to configuration settings the portal framework provides a way to get the configuration and expose it via ` MsPortalFx.getEnvironmentValue`. The following steps detail how it works:
 
 1. Portal framework will initialize the instance of the class ApplicationConfiguration (it is under Configuration folder in your project). It will try to populate all properties by finding configuration in web.config appSettings section. 
 For each property, portal framework will use the key "{ApplicationConfiguration class full name}.{property name}" unless you give a different name in the associated "ConfigurationSetting" attribute applied that property in your ApplicationConfiguration.
@@ -33,23 +22,12 @@ Suppose you created a portal extension called "MyExtension" the following steps 
 
 ```csharp
 
-/// <summary>
-/// The configuration for co-admin management.
-/// </summary>
-[Export(typeof(ArmConfiguration))]
-[Export(typeof(ConfigurationSettings))]
-public class ArmConfiguration : ConfigurationSettings
-{
-    /// <summary>
-    /// Gets the ARM/CSM endpoint
-    /// </summary>
     [ConfigurationSetting]
-    public Uri ArmEndpoint
+    public string PageSize
     {
         get;
         private set;
     }
-}
 
 ```
 
@@ -103,10 +81,13 @@ public class ArmConfiguration : ConfigurationSettings
 1. Now new configuration entry has been defined. To use the configuration, add the code like this in script:
 
     ```JavaScript
-        var pageSize = window.fx.environment && window.fx.environment.pageSize || 10;
+        var pageSize = MsPortalFx.getEnvironmentValue("pageSize") || 10;
     ```
 
 If you have any questions, reach out to Ibiza team on: [https://stackoverflow.microsoft.com/questions/tagged?tagnames=ibiza](https://stackoverflow.microsoft.com/questions/tagged?tagnames=ibiza).
 
 An extended version of the above is used to transfer domain based configuration (such as correctly formatted FwLinks) to the client.
 For details and examples, please see [Domain based configuration](portalfx-domain-based-configuration.md).
+=======
+The page you requested has moved to [top-extensions-custom-domains.md](top-extensions-custom-domains.md).
+>>>>>>> 51c5d8a6f9c77315861cd881794f30d57d3f63a2
